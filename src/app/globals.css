@@ -4,7 +4,33 @@
 
 @layer base {
   html {
-    @apply text-[1.1vw];
+    @apply text-[3vw] sm:text-[1.1vw];
+  }
+  h1 {
+    @apply text-4xl font-medium;
+  }
+  h2 {
+    @apply text-lg font-medium;
+  }
+  table {
+    @apply w-full border-collapse border-slate-700;
+  }
+  thead tr {
+    @apply bg-slate-900;
+  }
+  tbody tr {
+    @apply odd:bg-slate-700 even:bg-slate-800;
+  }
+  td {
+    @apply p-2;
+  }
+  input[type='text'],
+  input[type='number'] {
+    @apply appearance-none rounded-lg border-[0.125rem] border-slate-700 bg-slate-900 p-2;
+  }
+  button,
+  button[type='submit'] {
+    @apply rounded-lg bg-gradient-to-r from-pink-600 to-orange-600 px-4 py-2 disabled:bg-gray-500;
   }
 }
 
