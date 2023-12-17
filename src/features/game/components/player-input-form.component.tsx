@@ -1,32 +1,67 @@
 'use client';
-import { cn } from '@/lib/utils/tailwind.utils';
-import { useCallback, useState } from 'react';
+import { mockOpeningMessages } from '@/features/chat/mocks/chat.mocks';
+import useAppDispatch from '@/lib/hooks/app-dispatch.hook';
+import useAppSelector from '@/lib/hooks/app-selector.hook';
+import { randomNumberFromRange } from '@/lib/utils/random.utils';
+import { addChat } from '@/store/slices/chat.slice';
+import { placeBet } from '@/store/slices/game.slice';
+import { useCallback, useEffect, useState } from 'react';
 import { FaCaretSquareDown, FaCaretSquareUp } from 'react-icons/fa';
+import { v4 as uuidv4 } from 'uuid';
 
 export interface PlayerInputFormProps {}
 
 const PlayerInputForm: React.FC<PlayerInputFormProps> = (props) => {
-  const [points, setPoints] = useState(0);
-  const [multiplier, setMultiplier] = useState(0);
+  const [points, setPoints] = useState(50);
+  const [multiplier, setMultiplier] = useState(1.0);
+  const { players, status } = useAppSelector((store) => store.game);
+  const dispatch = useAppDispatch();
 
   const incrementPoints = useCallback(() => {
-    if (points < 1000) setPoints(points + 1);
-  }, [points]);
+    if (points < players[0].points) setPoints(points + 25);
+  }, [players, points]);
 
   const decrementPoints = useCallback(() => {
-    if (points > 0) setPoints(points - 1);
+    if (points > 25) setPoints(points - 25);
   }, [points]);
 
   const incrementMultiplier = useCallback(() => {
-    if (multiplier < 10) setMultiplier(multiplier + 1);
+    if (multiplier <= 9.75) setMultiplier(multiplier + 0.25);
   }, [multiplier]);
 
   const decrementMultiplier = useCallback(() => {
-    if (multiplier > 0) setMultiplier(multiplier - 1);
+    if (multiplier >= 0.25) setMultiplier(multiplier - 0.25);
   }, [multiplier]);
 
   const submitHandler = useCallback(() => {
     console.log('Staring...');
+    dispatch(placeBet({ multiplier, points }));
+  }, [dispatch, multiplier, points]);
+
+  useEffect(() => {
+    if (players[0].points < points) {
+      setPoints(players[0].points);
+    }
+  }, [players, points]);
+
+  useEffect(() => {
+    players.forEach((player) => {
+      if (/^CPU [1-4]$/.test(player.name)) {
+        setTimeout(() => {
+          dispatch(
+            addChat({
+              id: uuidv4(),
+              user: player,
+              message:
+                mockOpeningMessages[
+                  randomNumberFromRange(0, mockOpeningMessages.length - 2)
+                ],
+            })
+          );
+        }, Math.random() * 20000);
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -43,6 +78,8 @@ const PlayerInputForm: React.FC<PlayerInputFormProps> = (props) => {
               type="number"
               onChange={(e) => setPoints(+e.target.value)}
               value={points}
+              min={1}
+              max={players[0].points ?? 1000}
               className="h-8 w-full border-none text-center"
             />
             <FaCaretSquareUp
@@ -62,6 +99,8 @@ const PlayerInputForm: React.FC<PlayerInputFormProps> = (props) => {
               type="number"
               onChange={(e) => setMultiplier(+e.target.value)}
               value={multiplier}
+              min={0}
+              max={10}
               className="h-8 w-full border-none text-center"
             />
             <FaCaretSquareUp
@@ -71,7 +110,9 @@ const PlayerInputForm: React.FC<PlayerInputFormProps> = (props) => {
           </div>
         </div>
       </div>
-      <button onClick={submitHandler}>Start</button>
+      <button onClick={submitHandler} disabled={status === 'calculating'}>
+        Start
+      </button>
     </div>
   );
 };

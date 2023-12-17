@@ -1,9 +1,11 @@
 'use client';
 
+import useAppSelector from '@/lib/hooks/app-selector.hook';
+
 export interface RankingComponentProps {}
 
 const RankingComponent: React.FC<RankingComponentProps> = (props) => {
-  const {} = props;
+  const { players, round } = useAppSelector((store) => store.game);
 
   return (
     <div className="col-span-1 flex flex-col gap-1 sm:col-span-3">
@@ -17,15 +19,28 @@ const RankingComponent: React.FC<RankingComponentProps> = (props) => {
               <td>Score</td>
             </tr>
           </thead>
-          <tbody>
-            {[1, 2, 3, 4, 5].map((player) => (
-              <tr key={player}>
-                <td>{player}</td>
-                <td>{'_'}</td>
-                <td>{'_'}</td>
-              </tr>
-            ))}
-          </tbody>
+          {players.length === 0 && (
+            <tbody>
+              {[1, 2, 3, 4, 5].map((player, index) => (
+                <tr key={player}>
+                  <td>{index + 1}</td>
+                  <td>-</td>
+                  <td>-</td>
+                </tr>
+              ))}
+            </tbody>
+          )}
+          {players.length !== 0 && (
+            <tbody>
+              {players.map((player, index) => (
+                <tr key={player.name}>
+                  <td>{index + 1}</td>
+                  <td>{round === 1 ? '_' : player.name}</td>
+                  <td>{round === 1 ? '_' : player.points}</td>
+                </tr>
+              ))}
+            </tbody>
+          )}
         </table>
       </div>
     </div>
