@@ -74,11 +74,7 @@ export const gameSlice = createSlice({
       });
       state.status = 'betting';
       state.round++;
-      state.players.sort((a, b) => {
-        if (a.points > b.points) return -1;
-        if (a.points < b.points) return 1;
-        return 0;
-      });
+      state.players;
     },
     reset: (state) => {
       state.players = [

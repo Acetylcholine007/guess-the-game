@@ -2,6 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  @apply bg-slate-600;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  @apply rounded-sm bg-slate-800 shadow-sm shadow-slate-900;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-slate-700;
+}
+
 @layer base {
   html {
     @apply text-[3vw] sm:text-[1.1vw];
@@ -10,7 +31,7 @@
     @apply text-4xl font-medium;
   }
   h2 {
-    @apply text-lg font-medium;
+    @apply text-xl font-medium;
   }
   table {
     @apply w-full border-collapse border-slate-700;
@@ -27,6 +48,9 @@
   input[type='text'],
   input[type='number'] {
     @apply appearance-none rounded-lg border-[0.125rem] border-slate-700 bg-slate-900 p-2;
+  }
+  input[type='range'] {
+    @apply accent-rose-500
   }
   button,
   button[type='submit'] {
