@@ -1,7 +1,7 @@
 import { IUser } from '@/features/game/models/game.models';
 
 export interface IChat {
-  id: number;
+  id: string;
   user: IUser;
   message: string;
 }

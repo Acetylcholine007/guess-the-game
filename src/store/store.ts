@@ -1,7 +1,12 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore } from '@reduxjs/toolkit';
+import chatSlice from './slices/chat.slice';
+import gameSlice from './slices/game.slice';
 
 export const store = configureStore({
-  reducer: {},
+  reducer: {
+    [gameSlice.name]: gameSlice.reducer,
+    [chatSlice.name]: chatSlice.reducer,
+  },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }),
 });

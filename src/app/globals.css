@@ -22,7 +22,7 @@
     @apply odd:bg-slate-700 even:bg-slate-800;
   }
   td {
-    @apply p-2;
+    @apply px-8 py-2;
   }
   input[type='text'],
   input[type='number'] {
@@ -30,7 +30,7 @@
   }
   button,
   button[type='submit'] {
-    @apply rounded-lg bg-gradient-to-r from-pink-600 to-orange-600 px-4 py-2 disabled:bg-gray-500;
+    @apply rounded-lg bg-gradient-to-r from-pink-600 to-orange-600 px-4 py-2 disabled:bg-gray-500 disabled:bg-none;
   }
 }
 

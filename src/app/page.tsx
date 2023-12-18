@@ -7,15 +7,15 @@ import PlayerInputForm from '@/features/game/components/player-input-form.compon
 import RankingComponent from '@/features/game/components/ranking.component';
 import SpeedSlider from '@/features/game/components/speed-slider.component';
 import WelcomeForm from '@/features/game/components/welcome-form.component';
-import { useState } from 'react';
+import useAppSelector from '@/lib/hooks/app-selector.hook';
 
 export default function Home() {
-  const [isNewGame, setIsNewGame] = useState(true);
+  const { players } = useAppSelector((store) => store.game);
 
   return (
     <main className="flex h-full w-full flex-col gap-4 overflow-y-auto p-8 sm:px-24 sm:py-16">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-5">
-        {!isNewGame && (
+        {players.length !== 0 && (
           <div className="col-span-1 flex flex-col gap-4 sm:col-span-2">
             <PlayerInputForm />
             <div className="max-md:hidden">
@@ -24,9 +24,9 @@ export default function Home() {
             <SpeedSlider />
           </div>
         )}
-        {isNewGame && <WelcomeForm />}
+        {players.length === 0 && <WelcomeForm />}
         <GameBoard />
-        {!isNewGame && (
+        {players.length !== 0 && (
           <div className="md:hidden">
             <CurrentRound />
           </div>
