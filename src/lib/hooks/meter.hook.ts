@@ -14,6 +14,7 @@ export default function useMeter(ceiling: number, speed: number) {
   const meterRef = useRef<HTMLMeterElement>(null);
   const dotRef = useRef<SVGCircleElement>(null);
   const lineRef = useRef<SVGPathElement>(null);
+  const targetRef = useRef<HTMLHeadingElement>(null);
 
   const startHandler = useCallback(() => setStart(true), []);
   const resetHandler = useCallback(() => {
@@ -25,6 +26,7 @@ export default function useMeter(ceiling: number, speed: number) {
       dotRef.current.setAttribute('cy', '200');
       lineRef.current?.setAttribute('stroke-dash-array', `$0% 150%`);
     }
+    targetRef.current!.textContent = meterRef.current!.value.toString();
     setCount(0);
   }, []);
 
@@ -36,6 +38,9 @@ export default function useMeter(ceiling: number, speed: number) {
         setCount(meterRef.current.value);
       } else if (meterRef.current) {
         meterRef.current.value += 0.01;
+        targetRef.current!.textContent = `${(+meterRef.current.value).toFixed(
+          2
+        )}x`;
         dotRef.current!.setAttribute(
           'cx',
           ((meterRef.current.value / 10) * 390).toString()
@@ -58,5 +63,13 @@ export default function useMeter(ceiling: number, speed: number) {
     };
   }, [start, speed]);
 
-  return { count, meterRef, lineRef, dotRef, resetHandler, startHandler };
+  return {
+    count,
+    targetRef,
+    meterRef,
+    lineRef,
+    dotRef,
+    resetHandler,
+    startHandler,
+  };
 }

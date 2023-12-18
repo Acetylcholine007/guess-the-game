@@ -15,8 +15,15 @@ const GameBoard: React.FC<GameBoardProps> = (props) => {
   );
   const dispatch = useAppDispatch();
   const currentTime = useRealTimeClock();
-  const { count, meterRef, dotRef, lineRef, resetHandler, startHandler } =
-    useMeter(outcomeMultiplier ?? 0, speed);
+  const {
+    count,
+    meterRef,
+    dotRef,
+    targetRef,
+    lineRef,
+    resetHandler,
+    startHandler,
+  } = useMeter(outcomeMultiplier ?? 0, speed);
 
   useEffect(() => {
     if (status === 'calculating') {
@@ -60,7 +67,10 @@ const GameBoard: React.FC<GameBoardProps> = (props) => {
           max={10}
         />
 
-        <h1 className="pd-8 drop-shadow-glow absolute left-1/2 top-12 -translate-x-1/2 text-5xl  sm:top-24 sm:text-7xl">
+        <h1
+          ref={targetRef}
+          className="pd-8 drop-shadow-glow absolute left-1/2 top-12 -translate-x-1/2 text-5xl  sm:top-24 sm:text-7xl"
+        >
           {count !== 0 && status === 'betting'
             ? `${outcomeMultiplier?.toFixed(2)}x`
             : '0.00x'}
