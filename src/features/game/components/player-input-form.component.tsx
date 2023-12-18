@@ -4,9 +4,10 @@ import useAppDispatch from '@/lib/hooks/app-dispatch.hook';
 import useAppSelector from '@/lib/hooks/app-selector.hook';
 import { randomNumberFromRange } from '@/lib/utils/random.utils';
 import { addChat } from '@/store/slices/chat.slice';
-import { placeBet } from '@/store/slices/game.slice';
+import { placeBet, reset } from '@/store/slices/game.slice';
 import { useCallback, useEffect, useState } from 'react';
-import { FaCaretSquareDown, FaCaretSquareUp } from 'react-icons/fa';
+import { Modal } from 'react-daisyui';
+import { FaRegCaretSquareDown, FaRegCaretSquareUp } from 'react-icons/fa';
 import { v4 as uuidv4 } from 'uuid';
 
 export interface PlayerInputFormProps {}
@@ -34,9 +35,12 @@ const PlayerInputForm: React.FC<PlayerInputFormProps> = (props) => {
   }, [multiplier]);
 
   const submitHandler = useCallback(() => {
-    console.log('Staring...');
     dispatch(placeBet({ multiplier, points }));
   }, [dispatch, multiplier, points]);
+
+  const resetHandler = useCallback(() => {
+    dispatch(reset());
+  }, [dispatch]);
 
   useEffect(() => {
     if (players[0].points < points) {
@@ -70,7 +74,7 @@ const PlayerInputForm: React.FC<PlayerInputFormProps> = (props) => {
         <div className="card-fade flex basis-1/2 flex-col px-3 py-1">
           <p className="text-center text-xs">Points</p>
           <div className="flex items-center gap-2">
-            <FaCaretSquareDown
+            <FaRegCaretSquareDown
               className="h-8 w-8 cursor-pointer"
               onClick={decrementPoints}
             />
@@ -80,9 +84,9 @@ const PlayerInputForm: React.FC<PlayerInputFormProps> = (props) => {
               value={points}
               min={1}
               max={players[0].points ?? 1000}
-              className="h-8 w-full border-none text-center"
+              className="h-7 w-full border-none text-center"
             />
-            <FaCaretSquareUp
+            <FaRegCaretSquareUp
               className="h-8 w-8 cursor-pointer"
               onClick={incrementPoints}
             />
@@ -91,7 +95,7 @@ const PlayerInputForm: React.FC<PlayerInputFormProps> = (props) => {
         <div className="card-fade flex basis-1/2 flex-col px-3 py-1">
           <p className="text-center text-xs">Multiplier</p>
           <div className="flex items-center gap-2">
-            <FaCaretSquareDown
+            <FaRegCaretSquareDown
               className="h-8 w-8 cursor-pointer"
               onClick={decrementMultiplier}
             />
@@ -101,18 +105,32 @@ const PlayerInputForm: React.FC<PlayerInputFormProps> = (props) => {
               value={multiplier}
               min={0}
               max={10}
-              className="h-8 w-full border-none text-center"
+              className="h-7 w-full border-none text-center"
             />
-            <FaCaretSquareUp
+            <FaRegCaretSquareUp
               className="h-8 w-8 cursor-pointer"
               onClick={incrementMultiplier}
             />
           </div>
         </div>
       </div>
-      <button onClick={submitHandler} disabled={status === 'calculating'}>
+      <button
+        className="py-3"
+        onClick={submitHandler}
+        disabled={status === 'calculating'}
+      >
         Start
       </button>
+      <Modal open={players[0].points === 0 && status === 'betting'}>
+        <Modal.Header className="font-bold">Game Lost</Modal.Header>
+        <Modal.Body>
+          You&apos;ve ran out of points to bet as you have the the last round.
+          You can reset the game again.
+        </Modal.Body>
+        <Modal.Actions>
+          <button onClick={resetHandler}>New Game</button>
+        </Modal.Actions>
+      </Modal>
     </div>
   );
 };

@@ -9,7 +9,7 @@ const RankingComponent: React.FC<RankingComponentProps> = (props) => {
 
   return (
     <div className="col-span-1 flex flex-col gap-1 sm:col-span-3">
-      <h2>Ranking</h2>
+      <h2>📈 Ranking</h2>
       <div className="card-flat w-full overflow-hidden  rounded-lg">
         <table>
           <thead>
@@ -32,13 +32,19 @@ const RankingComponent: React.FC<RankingComponentProps> = (props) => {
           )}
           {players.length !== 0 && (
             <tbody>
-              {players.map((player, index) => (
-                <tr key={player.name}>
-                  <td>{index + 1}</td>
-                  <td>{round === 1 ? '_' : player.name}</td>
-                  <td>{round === 1 ? '_' : player.points}</td>
-                </tr>
-              ))}
+              {players
+                .toSorted((a, b) => {
+                  if (a.points > b.points) return -1;
+                  if (a.points < b.points) return 1;
+                  return 0;
+                })
+                .map((player, index) => (
+                  <tr key={player.name}>
+                    <td>{index + 1}</td>
+                    <td>{round === 1 ? '_' : player.name}</td>
+                    <td>{round === 1 ? '_' : player.points}</td>
+                  </tr>
+                ))}
             </tbody>
           )}
         </table>

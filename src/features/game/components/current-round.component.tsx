@@ -13,7 +13,7 @@ const CurrentRound: React.FC<CurrentRoundProps> = (props) => {
 
   return (
     <div className="col-span-3 flex flex-col gap-1">
-      <h2>Current Round</h2>
+      <h2>🏆 Current Round</h2>
       <div className="card-flat w-full overflow-hidden  rounded-lg">
         <table>
           <thead>

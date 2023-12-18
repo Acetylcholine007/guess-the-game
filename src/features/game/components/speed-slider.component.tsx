@@ -12,7 +12,7 @@ const SpeedSlider: React.FC<SpeedSliderProps> = (props) => {
 
   return (
     <div className="col-span-3 flex flex-col gap-1">
-      <h2>Speed</h2>
+      <h2>💨 Speed</h2>
       <div className="card-flat flex flex-col p-3">
         <input
           value={speed}
